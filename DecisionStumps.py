@@ -16,7 +16,7 @@ class DecisionStumps:
         self.training_set = []
         for row in data:
             self.training_set.append( (tuple(row[0:2]), row[2]) )
-        
+
     def get_hypothesis(self):
         
         for i in range(self.data_dim):
