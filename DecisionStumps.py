@@ -8,14 +8,16 @@ base classifier algorithm
 import numpy as np
 
 class DecisionStumps:
-    def __init__(self, data_size, data_dim, data, weights):
+    def __init__(self):
+        self.data_size = 0
+        self.data_dim = 0
+
+    def get_hypothesis(self, data_size, data_dim, data, weights):
         self.data_size = data_size
         self.data_dim = data_dim
         self.data = data
         self.weights = weights
 
-    def get_hypothesis(self):
-        
         hypothesis = []
         for i in range(self.data_dim):
             min_error = -1 #min error count
@@ -59,4 +61,54 @@ class DecisionStumps:
                             min_th = boundary
             hypothesis.append([min_error, min_index, min_dim, min_th])
         return hypothesis
-            
+        
+    def get_g_and_predect_result(self, data_size, data_dim, data, weights):
+        hypothesis = self.get_hypothesis(data_size,data_dim,data,weights)
+        dim = 0
+        th = 0
+        index = 0
+        error = -1
+        for h in hypothesis:
+            if error == -1:
+                error = h[0]
+                index = h[1]
+                dim = h[2]
+                th = h[3]
+            elif h[0] < error:
+                error = h[0]
+                index = h[1]
+                dim = h[2]
+                th = h[3] 
+        data_feature = self.data[:,dim]
+        data_y = self.data[:,-1]
+        data_g_x = []
+        for feature, y in zip(data_feature, data_y):
+            if index * ( feature - th ) >= 0:
+                data_g_x.append(1)
+            else:
+                data_g_x.append(-1)
+
+        return [[th, dim, index],data_g_x,error]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
