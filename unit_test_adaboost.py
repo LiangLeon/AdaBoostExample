@@ -17,7 +17,7 @@ class TestDecisionStumpsMethods(unittest.TestCase):
     weights = np.linspace(1, 1, len(data))
     weights /= len(data)
     MyDS = DecisionStumps.DecisionStumps(len(data), MyDataGen.data_dim, data, weights)
-    self.assertEqual((0.30000000000000004,-1,1,-2.5), MyDS.get_hypothesis())
+    self.assertEqual([[0.30000000000000004, -1, 0, 0.5], [0.30000000000000004, -1, 1, -2.5]], MyDS.get_hypothesis())
 
   def test_default_data_2(self):
     MyDataGen = DataGen.DataGenerator()
@@ -25,7 +25,7 @@ class TestDecisionStumpsMethods(unittest.TestCase):
     weights = np.linspace(1, 1, len(data))
     weights /= len(data)
     MyDS = DecisionStumps.DecisionStumps(len(data), MyDataGen.data_dim, data, weights)
-    self.assertEqual((0.25,-1,1,-1.75), MyDS.get_hypothesis())
+    self.assertEqual([[0.25, 1, 0, -0.5], [0.25, -1, 1, -1.75]], MyDS.get_hypothesis())
 
   def test_default_data_3(self):
     MyDataGen = DataGen.DataGenerator()
@@ -33,7 +33,7 @@ class TestDecisionStumpsMethods(unittest.TestCase):
     weights = np.linspace(1, 1, len(data))
     weights /= len(data)
     MyDS = DecisionStumps.DecisionStumps(len(data), MyDataGen.data_dim, data, weights)
-    self.assertEqual((0.375, 1, 1, -2.5), MyDS.get_hypothesis())
+    self.assertEqual([[0.25, -1, 0, 1.75], [0.375, 1, 1, -2.5]], MyDS.get_hypothesis())
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestDecisionStumpsMethods)

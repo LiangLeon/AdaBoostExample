@@ -16,6 +16,7 @@ class DecisionStumps:
 
     def get_hypothesis(self):
         
+        hypothesis = []
         for i in range(self.data_dim):
             min_error = -1 #min error count
             min_index = -1 #positive or negative
@@ -56,5 +57,6 @@ class DecisionStumps:
                             min_index = k
                             min_dim = i
                             min_th = boundary
-        return min_error, min_index, min_dim, min_th
+            hypothesis.append([min_error, min_index, min_dim, min_th])
+        return hypothesis
             
