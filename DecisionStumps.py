@@ -35,6 +35,8 @@ class DecisionStumps:
                 boundary = 0
                 if n != decision_boundary[-1]:
                     boundary = (decision_boundary[j] + decision_boundary[j+1])/2.0
+                else:
+                    break
                 for k in [1,-1]: #1 for right positive -1 for right negative
                         error_count = 0
                         for feature, y, mu in zip( data_feature, data_y, data_weights ):

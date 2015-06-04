@@ -11,7 +11,7 @@ import DecisionStumps
 
 if __name__ == '__main__':
     MyDataGen = DataGen.DataGenerator()
-    data = MyDataGen.get_default_data()
+    data = MyDataGen.get_default_data_1()
     weights = np.linspace(1, 1, len(data))
     weights /= len(data)
     MyDS = DecisionStumps.DecisionStumps(len(data), MyDataGen.data_dim, data, weights) 
