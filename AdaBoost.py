@@ -17,8 +17,8 @@ class AdaBoost:
         self.data_size = len(data)
         self.data_dim = data[:,0:-1].shape[1]
         self.data_y = data[:,-1]
-        weights = np.linspace(1, 1, self.data_size)
-        weights /= self.data_size
+        #inital weights = [1/N . . .]
+        weights = np.linspace(1.0/self.data_size , 1.0/self.data_size , self.data_size)
         self.g_stack = []
         g_x_stack = []
         self.alpha_stack = []
@@ -37,7 +37,7 @@ class AdaBoost:
                     weights[index] *= delta
                 else:
                     weights[index] /= delta
-                
+            #After re-weights, normalize to distribution 
             weights /= sum(weights)
             total = np.array([])
             for alpha, g_result in zip(self.alpha_stack,g_x_stack):
@@ -46,8 +46,7 @@ class AdaBoost:
                     total = temp
                 else:
                     total += temp
-                                
-                
+
             for index, answer in enumerate(total):
                 if answer >= 0:
                     total[index] = 1
