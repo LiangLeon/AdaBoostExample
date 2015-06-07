@@ -7,11 +7,12 @@ Created on Thu Jun 04 21:29:06 2015
 
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 class AdaBoost:
     def __init__(self):
         pass
-    def get_adaboost_model(self, data, desired_error, plot_result=None):
+    def get_adaboost_model(self, data, desired_error, plot_result=None, plot_g=None):
         max_round = 100
         current_round = 0
         total_error = 0
@@ -74,21 +75,30 @@ class AdaBoost:
                 final_alpha_stack[final_g_stack.index(_g)] += _a
         
         if plot_result == True:
-            import matplotlib.pyplot as plt
-            plt.rcParams['figure.figsize'] = 15, 10
+
+            plt.rcParams['figure.figsize'] = 8, 6
             positive = data[data[:,-1]==1]
             negative = data[data[:,-1]!=1]
-            xmin, xmax = data[:,0].min()-0.1, data[:,0].max()+0.1
-            ymin, ymax = data[:,1].min()-0.1, data[:,1].max()+0.1
+            xmin, xmax = data[:,0].min()-0.5, data[:,0].max()+0.5
+            ymin, ymax = data[:,1].min()-0.5, data[:,1].max()+0.5
             xx, yy = np.meshgrid(np.arange(xmin, xmax, 0.1), np.arange(ymin, ymax, 0.1))
             xnew = np.c_[xx.ravel(), yy.ravel()]
     
             ynew = self.predict_results(final_g_stack,final_alpha_stack,xnew).reshape(xx.shape)
             plt.figure(1)
             plt.set_cmap(plt.cm.Blues)
+            axes = plt.gca()
+            axes.set_xlim([xmin,xmax])
+            axes.set_ylim([ymin,ymax])
             plt.pcolormesh(xx, yy, ynew)
             plt.plot(positive[:,0], positive[:,1], 'ob',markersize=10)
             plt.plot(negative[:,0], negative[:,1], 'xr',markersize=16)
+            if plot_g == True:
+                for g in final_g_stack:
+                    if g[1] == 0:
+                        plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='grey', linestyle='-', linewidth=2)
+                    elif g[1] == 1: 
+                        plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='grey', linestyle='-', linewidth=2)
             plt.show()
             
         return final_g_stack, final_alpha_stack
