@@ -11,7 +11,7 @@ import math
 class AdaBoost:
     def __init__(self):
         pass
-    def get_adaboost_model(self, data, desired_error):
+    def get_adaboost_model(self, data, desired_error, plot_result=None):
         max_round = 100
         current_round = 0
         total_error = 0
@@ -72,6 +72,24 @@ class AdaBoost:
                 final_alpha_stack.append(_a)
             else:
                 final_alpha_stack[final_g_stack.index(_g)] += _a
+        
+        if plot_result == True:
+            import matplotlib.pyplot as plt
+            plt.rcParams['figure.figsize'] = 15, 10
+            positive = data[data[:,-1]==1]
+            negative = data[data[:,-1]!=1]
+            xmin, xmax = data[:,0].min()-0.1, data[:,0].max()+0.1
+            ymin, ymax = data[:,1].min()-0.1, data[:,1].max()+0.1
+            xx, yy = np.meshgrid(np.arange(xmin, xmax, 0.1), np.arange(ymin, ymax, 0.1))
+            xnew = np.c_[xx.ravel(), yy.ravel()]
+    
+            ynew = self.predict_results(final_g_stack,final_alpha_stack,xnew).reshape(xx.shape)
+            plt.figure(1)
+            plt.set_cmap(plt.cm.Blues)
+            plt.pcolormesh(xx, yy, ynew)
+            plt.plot(positive[:,0], positive[:,1], 'ob',markersize=10)
+            plt.plot(negative[:,0], negative[:,1], 'xr',markersize=16)
+            plt.show()
             
         return final_g_stack, final_alpha_stack
         
@@ -90,7 +108,12 @@ class AdaBoost:
             return 1
         else:
             return -1
-                
+
+    def predict_results(self, g_s, a_s, data):
+        result = np.zeros(len(data))
+        for i,_data in enumerate(data):
+            result[i] = self.predict_result(g_s,a_s,_data)
+        return result
                 
                 
                 
