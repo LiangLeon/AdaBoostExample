@@ -13,7 +13,7 @@ class AdaBoost:
     def __init__(self):
         pass
     def get_adaboost_model(self, data, desired_error, plot_result=None, plot_g=None):
-        max_round = 100
+        max_round = 1000
         current_round = 0
         total_error = 0
         data_size = len(data)
@@ -79,9 +79,9 @@ class AdaBoost:
             plt.rcParams['figure.figsize'] = 8, 6
             positive = data[data[:,-1]==1]
             negative = data[data[:,-1]!=1]
-            xmin, xmax = data[:,0].min()-0.5, data[:,0].max()+0.5
-            ymin, ymax = data[:,1].min()-0.5, data[:,1].max()+0.5
-            xx, yy = np.meshgrid(np.arange(xmin, xmax, 0.1), np.arange(ymin, ymax, 0.1))
+            xmin, xmax = data[:,0].min()-0.1, data[:,0].max()+0.1
+            ymin, ymax = data[:,1].min()-0.1, data[:,1].max()+0.1
+            xx, yy = np.meshgrid(np.arange(xmin, xmax, 0.01), np.arange(ymin, ymax, 0.01))
             xnew = np.c_[xx.ravel(), yy.ravel()]
     
             ynew = self.predict_results(final_g_stack,final_alpha_stack,xnew).reshape(xx.shape)
@@ -92,7 +92,7 @@ class AdaBoost:
             axes.set_ylim([ymin,ymax])
             plt.pcolormesh(xx, yy, ynew)
             plt.plot(positive[:,0], positive[:,1], 'ob',markersize=10)
-            plt.plot(negative[:,0], negative[:,1], 'xr',markersize=16)
+            plt.plot(negative[:,0], negative[:,1], '^r',markersize=10)
             if plot_g == True:
                 for g in final_g_stack:
                     if g[1] == 0:
@@ -101,7 +101,7 @@ class AdaBoost:
                         plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='grey', linestyle='-', linewidth=2)
             plt.show()
             
-        return final_g_stack, final_alpha_stack
+        return final_g_stack, final_alpha_stack, total_error, current_round
         
     def predict_result(self, g_s, a_s, data):
         result = 0
