@@ -21,8 +21,28 @@ class DataGenerator:
         self.data_size = len(data)
 
         if plot == True:
-            self.plot_2d_data(data)
-
+            #self.plot_2d_data(data)
+            labels = [1.0/self.data_size] * self.data_size;
+            plt.rcParams['figure.figsize'] = 8, 6
+            positive = data[data[:,-1]==1]
+            negative = data[data[:,-1]!=1]
+            xmin, xmax = data[:,0].min()-0.1, data[:,0].max()+0.1
+            ymin, ymax = data[:,1].min()-0.1, data[:,1].max()+0.1        
+            plt.figure(1)
+            plt.set_cmap(plt.cm.Blues)
+            axes = plt.gca()
+            axes.set_xlim([xmin,xmax])
+            axes.set_ylim([ymin,ymax])
+            plt.plot(positive[:,0], positive[:,1], 'ob',markersize=10)
+            plt.plot(negative[:,0], negative[:,1], '^r',markersize=10)
+#            for label, x, y in zip(labels, data[:, 0], data[:, 1]):
+#                plt.annotate(
+#                label, 
+#                xy = (x, y), xytext = (-10, 10),
+#                textcoords = 'offset points', ha = 'right', va = 'bottom',
+#                bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 0.5),
+#                arrowprops = None)
+            plt.show()
         return data
 
     def get_default_data_2(self, plot=None):

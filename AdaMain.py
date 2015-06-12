@@ -10,7 +10,8 @@ import AdaBoost
 
 if __name__ == '__main__':
     MyDataGen = DataGen.DataGenerator()
-    data = MyDataGen.separable_2d(3213,20,plot=True)
+    data = MyDataGen.get_default_data_1(plot=True)
+    #data = MyDataGen.separable_2d(223,5,plot=True)
     #data = MyDataGen.separable_2d_circle(2332,100,[7.0,3.0,2],plot=True)  
     positive = data[data[:,-1]==1]
     negative = data[data[:,-1]!=1]
