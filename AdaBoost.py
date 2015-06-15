@@ -24,6 +24,7 @@ class AdaBoost:
         g_stack = []
         g_x_stack = []
         alpha_stack = []
+
         import DecisionStumps
         Decision_Stumps = DecisionStumps.DecisionStumps()
         while True:
@@ -124,8 +125,109 @@ class AdaBoost:
         for i,_data in enumerate(data):
             result[i] = self.predict_result(g_s,a_s,_data)
         return result
+        
+    def ADA_boost_show_demo_plot(self, data, g_s, a_s):
+        import decimal
+        data_size = len(data)
+        #labels = [ decimal.Decimal(1.0/data_size).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)] * data_size;
+        weights = np.linspace(1.0/data_size , 1.0/data_size , data_size)
+        labels_min = min(weights)     
+        plt.rcParams['figure.figsize'] = 8, 6
+        xmin, xmax = data[:,0].min()-0.1, data[:,0].max()+0.1
+        ymin, ymax = data[:,1].min()-0.1, data[:,1].max()+0.1    
+        xx, yy = np.meshgrid(np.arange(xmin, xmax, 0.01), np.arange(ymin, ymax, 0.01))
+        xnew = np.c_[xx.ravel(), yy.ravel()]
+        plt.figure(1)
+        axes = plt.gca()
+        axes.set_xlim([xmin,xmax])
+        axes.set_ylim([ymin,ymax])
+        for label, x, y, ans in zip(weights, data[:, 0], data[:, 1], data[:,-1]):
+            m_size = 10 + ( label - labels_min ) * 20
+            if m_size <= 0:
+                m_size = 1
+            if ans == 1:
+                plt.plot(x,y,'ob',markersize=m_size,markeredgewidth=2)
+            else:
+                plt.plot(x,y,'^r',markersize=m_size,markeredgewidth=2)  
+            label = decimal.Decimal(label).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
+            plt.annotate(
+            label, 
+            xy = (x, y), xytext = (-10, 10),
+            textcoords = 'offset points', ha = 'right', va = 'bottom',
+            bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 0.5),
+            arrowprops = None)
+        plt.show()
+        if g_s == [] and a_s == []:
+            plt.show()
+        else:
+            inn_g = []
+            inn_a = []
+            for _g, _a in zip(g_s,a_s):
+                inn_g.append(_g)
+                inn_a.append(_a)
+                ynew = self.predict_results(inn_g,inn_a,xnew).reshape(xx.shape)
+                plt.figure(1)
+                plt.set_cmap(plt.cm.bwr_r)
+                axes = plt.gca()
+                axes.set_xlim([xmin,xmax])
+                axes.set_ylim([ymin,ymax])
+                plt.pcolormesh(xx, yy, ynew)
+                error_count = 0
+                data_correct = [1] * data_size
+                delta = 0.1            
+                for g in inn_g:
+                    if g[1] == 0:
+                        plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='black', linestyle='-', linewidth=2)
+                    elif g[1] == 1: 
+                        plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='black', linestyle='-', linewidth=2)
                 
-                
+                for i, _data, in enumerate(data):
+                    if self.predict_result([_g], [_a], _data) != _data[-1]:
+                        error_count += 1
+                        data_correct[i] = 0
+                error = error_count / float(data_size)
+                if error != 0:
+                    delta = math.sqrt((1-error)/error)      
+                    for w_index, (w, correct) in enumerate(zip(weights, data_correct)):
+                        if correct != 1:
+                            weights[w_index] = w * delta
+                        else:
+                            weights[w_index] = w / delta
+                    weights /= sum(weights)
+                    for label, x, y, ans in zip(weights, data[:, 0], data[:, 1], data[:,-1]):
+                        m_size = 10 + ( label - labels_min ) * 20
+                        if m_size <= 0:
+                            m_size = 1
+                        if ans == 1:
+                            plt.plot(x,y,'ob',markersize=m_size,markeredgewidth=2)
+                        else:
+                            plt.plot(x,y,'^r',markersize=m_size,markeredgewidth=2)  
+                        label = decimal.Decimal(label).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
+                        plt.annotate(
+                        label, 
+                        xy = (x, y), xytext = (-10, 10),
+                        textcoords = 'offset points', ha = 'right', va = 'bottom',
+                        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 1.),
+                        arrowprops = None)   
+                    plt.show()
+                else:
+                    for label, x, y, ans in zip(weights, data[:, 0], data[:, 1], data[:,-1]):
+                        m_size = 10 + ( label - labels_min ) * 20
+                        if m_size <= 0:
+                            m_size = 1
+                        if ans == 1:
+                            plt.plot(x,y,'ob',markersize=m_size,markeredgewidth=2)
+                        else:
+                            plt.plot(x,y,'^r',markersize=m_size,markeredgewidth=2)  
+                        label = decimal.Decimal(label).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
+                        plt.annotate(
+                        label, 
+                        xy = (x, y), xytext = (-10, 10),
+                        textcoords = 'offset points', ha = 'right', va = 'bottom',
+                        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 1.),
+                        arrowprops = None)   
+                    plt.show()
+            
                 
                 
                 
