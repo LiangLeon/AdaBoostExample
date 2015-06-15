@@ -132,7 +132,7 @@ class AdaBoost:
         #labels = [ decimal.Decimal(1.0/data_size).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)] * data_size;
         weights = np.linspace(1.0/data_size , 1.0/data_size , data_size)
         labels_min = min(weights)     
-        plt.rcParams['figure.figsize'] = 8, 6
+        plt.rcParams['figure.figsize'] = 16, 12
         xmin, xmax = data[:,0].min()-0.1, data[:,0].max()+0.1
         ymin, ymax = data[:,1].min()-0.1, data[:,1].max()+0.1    
         xx, yy = np.meshgrid(np.arange(xmin, xmax, 0.01), np.arange(ymin, ymax, 0.01))
@@ -142,7 +142,7 @@ class AdaBoost:
         axes.set_xlim([xmin,xmax])
         axes.set_ylim([ymin,ymax])
         for label, x, y, ans in zip(weights, data[:, 0], data[:, 1], data[:,-1]):
-            m_size = 10 + ( label - labels_min ) * 20
+            m_size = 20 + ( label - labels_min ) * 30
             if m_size <= 0:
                 m_size = 1
             if ans == 1:
@@ -150,12 +150,14 @@ class AdaBoost:
             else:
                 plt.plot(x,y,'^r',markersize=m_size,markeredgewidth=2)  
             label = decimal.Decimal(label).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
-            plt.annotate(
-            label, 
-            xy = (x, y), xytext = (-10, 10),
-            textcoords = 'offset points', ha = 'right', va = 'bottom',
-            bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 0.5),
-            arrowprops = None)
+
+#            plt.annotate(
+#            label, 
+#            xy = (x, y), xytext = (-20, 20),
+#            textcoords = 'offset points', ha = 'right', va = 'bottom',
+#            bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 1.),
+#            arrowprops = None,
+#            size = 20)
         plt.show()
         if g_s == [] and a_s == []:
             plt.show()
@@ -178,14 +180,14 @@ class AdaBoost:
                 for g in inn_g:
                     if g[1] == 0:
                         if g == inn_g[-1]:
-                            plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='black', linestyle='-', linewidth=2)
+                            plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='black', linestyle='-', linewidth=5)
                         else:
-                            plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='grey', linestyle='-', linewidth=2)                       
+                            plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='grey', linestyle='-', linewidth=5)                       
                     elif g[1] == 1: 
                         if g == inn_g[-1]:
-                            plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='black', linestyle='-', linewidth=2)
+                            plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='black', linestyle='-', linewidth=5)
                         else:
-                            plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='grey', linestyle='-', linewidth=2)                     
+                            plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='grey', linestyle='-', linewidth=5)                     
                 
                 for i, _data, in enumerate(data):
                     if self.predict_result([_g], [_a], _data) != _data[-1]:
@@ -201,7 +203,7 @@ class AdaBoost:
                             weights[w_index] = w / delta
                     weights /= sum(weights)
                     for label, x, y, ans in zip(weights, data[:, 0], data[:, 1], data[:,-1]):
-                        m_size = 10 + ( label - labels_min ) * 20
+                        m_size = 20 + ( label - labels_min ) * 30
                         if m_size <= 0:
                             m_size = 1
                         if ans == 1:
@@ -209,16 +211,17 @@ class AdaBoost:
                         else:
                             plt.plot(x,y,'^r',markersize=m_size,markeredgewidth=2)  
                         label = decimal.Decimal(label).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
-                        plt.annotate(
-                        label, 
-                        xy = (x, y), xytext = (-10, 10),
-                        textcoords = 'offset points', ha = 'right', va = 'bottom',
-                        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 1.),
-                        arrowprops = None)   
+#                        plt.annotate(
+#                        label, 
+#                        xy = (x, y), xytext = (-20, 20),
+#                        textcoords = 'offset points', ha = 'right', va = 'bottom',
+#                        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 1.),
+#                        arrowprops = None,
+#                        size = 20)   
                     plt.show()
                 else:
                     for label, x, y, ans in zip(weights, data[:, 0], data[:, 1], data[:,-1]):
-                        m_size = 10 + ( label - labels_min ) * 20
+                        m_size = 20 + ( label - labels_min ) * 30
                         if m_size <= 0:
                             m_size = 1
                         if ans == 1:
@@ -226,12 +229,13 @@ class AdaBoost:
                         else:
                             plt.plot(x,y,'^r',markersize=m_size,markeredgewidth=2)  
                         label = decimal.Decimal(label).quantize(decimal.Decimal('.01'), rounding=decimal.ROUND_DOWN)
-                        plt.annotate(
-                        label, 
-                        xy = (x, y), xytext = (-10, 10),
-                        textcoords = 'offset points', ha = 'right', va = 'bottom',
-                        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 1.),
-                        arrowprops = None)   
+#                        plt.annotate(
+#                        label, 
+#                        xy = (x, y), xytext = (-20, 20),
+#                        textcoords = 'offset points', ha = 'right', va = 'bottom',
+#                        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 1.),
+#                        arrowprops = None,
+#                        size = 20)   
                     plt.show()
             
                 
