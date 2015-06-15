@@ -177,9 +177,15 @@ class AdaBoost:
                 delta = 0.1            
                 for g in inn_g:
                     if g[1] == 0:
-                        plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='black', linestyle='-', linewidth=2)
+                        if g == inn_g[-1]:
+                            plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='black', linestyle='-', linewidth=2)
+                        else:
+                            plt.plot([g[0],g[0]],[ymin-1,ymax+1],color='grey', linestyle='-', linewidth=2)                       
                     elif g[1] == 1: 
-                        plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='black', linestyle='-', linewidth=2)
+                        if g == inn_g[-1]:
+                            plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='black', linestyle='-', linewidth=2)
+                        else:
+                            plt.plot([xmin-1,xmax+1], [g[0],g[0]],color='grey', linestyle='-', linewidth=2)                     
                 
                 for i, _data, in enumerate(data):
                     if self.predict_result([_g], [_a], _data) != _data[-1]:
