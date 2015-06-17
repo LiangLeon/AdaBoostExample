@@ -134,7 +134,7 @@ class DataGenerator:
         return data
         
     def plot_2d_data(self, data):
-        plt.rcParams['figure.figsize'] = 8, 6
+        plt.rcParams['figure.figsize'] = 16, 12
         positive = data[data[:,-1]==1]
         negative = data[data[:,-1]!=1]
         xmin, xmax = data[:,0].min()-0.1, data[:,0].max()+0.1
@@ -144,8 +144,8 @@ class DataGenerator:
         axes = plt.gca()
         axes.set_xlim([xmin,xmax])
         axes.set_ylim([ymin,ymax])
-        plt.plot(positive[:,0], positive[:,1], 'ob',markersize=10)
-        plt.plot(negative[:,0], negative[:,1], '^r',markersize=10)
+        plt.plot(positive[:,0], positive[:,1], 'ob',markersize=20)
+        plt.plot(negative[:,0], negative[:,1], '^r',markersize=20)
         plt.show()
         
         
